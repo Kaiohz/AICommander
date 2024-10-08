@@ -44,7 +44,6 @@ RESPONSE=$(curl -sX POST https://generativelanguage.googleapis.com/v1beta/models
 COMMAND=$(jq -r '.candidates[0].content.parts[0].text' <<< "$RESPONSE")
 
 if [[ $? -eq 0 ]]; then
-  echo "Generated command: $RESPONSE"
   $COMMAND
 else
   echo "Error executing command. Check API response for details."
