@@ -10,7 +10,7 @@ To use the AI Commander, follow the steps below:
 2. Run the script `ai_commander.sh` with the user request as an argument.
 
 ```bash
-./ai_commander.sh "user request here"
+./ai_commander.sh
 ```
 
 3. The AI Commander will generate a Unix command related to the user request and execute it.
