@@ -21,17 +21,13 @@ REQUEST_BODY=$(cat <<EOF
     "role": "user",
     "parts": [
       {
-        "text": "you are an ai specialized in unix command. you will 
-receive a user request and give the unix command related to the user 
-request. Answer only with the command."
+        "text": "You will receive a user request and give the unix command related to the user request. Answer only with the command."
       }
     ]
   },
   "generationConfig": {
     "temperature": 0,
-    "topK": 64,
-    "topP": 0.95,
-    "maxOutputTokens": 8192,
+    "maxOutputTokens": 100,
     "responseMimeType": "text/plain"
   }
 }
@@ -40,11 +36,12 @@ EOF
 
 # Send the request and capture the response
 RESPONSE=$(curl -sX POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${AI_COMMANDER_API_KEY} -H 'Content-Type: application/json' -d "$REQUEST_BODY")
-
 COMMAND=$(jq -r '.candidates[0].content.parts[0].text' <<< "$RESPONSE")
+ESCAPED_COMMAND=$(echo $COMMAND | sed 's/`//g')
+echo "Command: ${ESCAPED_COMMAND}"
 
 if [[ $? -eq 0 ]]; then
-  $COMMAND
+  $ESCAPED_COMMAND
 else
   echo "Error executing command. Check API response for details."
   echo "API Response: $RESPONSE"
